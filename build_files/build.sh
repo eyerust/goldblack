@@ -10,7 +10,9 @@ set -ouex pipefail
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
 # this installs a package from fedora repos
-#dnf5 install -y tmux 
+#dnf5 install -y tmux
+
+dnf5 install -y adw-gtk3-theme bat bridge-utils ddcutil eza fio gnome-tweaks htop iotop libgda libgda-sqlite lm_sensors morewaita-icon-theme mullvad-vpn nautilus-python ncdu neovim nvidia-container-toolkit nvtop perf podman-docker python3-devel ripgrep smartmontools steam-devices strace syncthing sysprof tcpdump virt-install virt-manager waydroid wireguard-tools ydotool zsh
 
 # Use a COPR Example:
 #
