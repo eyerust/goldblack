@@ -12,7 +12,10 @@ set -ouex pipefail
 # this installs a package from fedora repos
 #dnf5 install -y tmux
 
-dnf5 install -y adw-gtk3-theme bat bridge-utils ddcutil eza fio gnome-tweaks htop iotop libgda libgda-sqlite lm_sensors morewaita-icon-theme mullvad-vpn nautilus-python ncdu neovim nvidia-container-toolkit nvtop perf podman-docker python3-devel ripgrep smartmontools steam-devices strace syncthing sysprof tcpdump virt-install virt-manager waydroid wireguard-tools ydotool zsh
+dnf5 -y config-manager addrepo --from-repofile=https://repository.mullvad.net/rpm/stable/mullvad.repo
+dnf5 -y copr enable trixieua/morewaita-icon-theme
+
+dnf5 install -y adw-gtk3-theme bat bridge-utils ddcutil fio gnome-tweaks htop iotop libgda libgda-sqlite lm_sensors morewaita-icon-theme mullvad-vpn nautilus-python ncdu neovim nvidia-container-toolkit nvtop perf podman-docker python3-devel ripgrep smartmontools steam-devices strace syncthing sysprof tcpdump virt-install virt-manager waydroid wireguard-tools ydotool zsh
 
 # Use a COPR Example:
 #
