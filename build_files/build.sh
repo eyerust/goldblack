@@ -27,3 +27,6 @@ dnf5 install -y adw-gtk3-theme bat bridge-utils ddcutil fio gnome-tweaks htop io
 #### Example for enabling a System Unit File
 
 #systemctl enable podman.socket
+
+# Change default GTK Renderer to opengl because Vulkan is too slow with NVIDIA drivers
+echo '\n# Use OpenGL because Vulkan is slow with NVIDIA drivers\nGSK_RENDERER=opengl' >> /etc/environment
