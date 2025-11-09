@@ -29,4 +29,4 @@ dnf5 install -y adw-gtk3-theme bat bridge-utils ddcutil fio gnome-tweaks htop io
 #systemctl enable podman.socket
 
 # Change default GTK Renderer to opengl because Vulkan is too slow with NVIDIA drivers
-echo '\n# Use OpenGL because Vulkan is slow with NVIDIA drivers\nGSK_RENDERER=opengl' >> /etc/environment
+printf '\n# Use OpenGL because Vulkan is slow with NVIDIA drivers\nGSK_RENDERER=opengl\n' >> /etc/environment
