@@ -32,3 +32,4 @@ dnf5 install -y adw-gtk3-theme bat bridge-utils ddcutil fio gnome-tweaks htop io
 printf '\n# Use OpenGL because Vulkan is slow with NVIDIA drivers\nGSK_RENDERER=opengl\n' >> /etc/environment
 
 systemctl enable goldblack-nvidia-flatpak-sync.service
+systemctl enable goldblack-nvidia-raise-min-clock.service

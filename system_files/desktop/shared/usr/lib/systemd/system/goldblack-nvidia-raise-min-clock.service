@@ -1,0 +1,11 @@
+[Unit]
+Description=Raise the minimum NVIDIA GPU clock speed
+After=default.target
+After=nvidia-persistenced.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/goldblack-nvidia-raise-min-clock
+
+[Install]
+WantedBy=default.target

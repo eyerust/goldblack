@@ -1,0 +1,35 @@
+#!/usr/bin/bash
+
+set -e
+
+# Enable persistence mode
+/usr/bin/nvidia-smi -pm 1
+
+echo "Querying NVIDIA GPU for supported graphics clock speeds..."
+
+readarray -t CLOCKS < <(nvidia-smi --query-supported-clocks=graphics --format=csv,noheader,nounits)
+
+# Check if we actually got any clock speeds
+if [ ${#CLOCKS[@]} -eq 0 ]; then
+  echo "Error: Could not retrieve supported clock speeds from nvidia-smi." >&2
+  exit 1
+fi
+
+# The highest clock is the first one in the list
+MAX_CLOCK=${CLOCKS[0]}
+
+# Calculate the index of the middle element
+MIDDLE_INDEX=$((${#CLOCKS[@]} / 2))
+
+# Get the clock speed at the middle index
+MIDDLE_CLOCK=${CLOCKS[$MIDDLE_INDEX]}
+
+echo "Found ${#CLOCKS[@]} supported clock speeds."
+echo "Highest clock: ${MAX_CLOCK} MHz"
+echo "Middle clock (for minimum): ${MIDDLE_CLOCK} MHz"
+
+# Set the GPU's persistent clock speed range.
+echo "Applying lock: nvidia-smi -lgc ${MIDDLE_CLOCK},${MAX_CLOCK}"
+/usr/bin/nvidia-smi -lgc "${MIDDLE_CLOCK},${MAX_CLOCK}"
+
+echo "NVIDIA GPU clock speed successfully locked to range [${MIDDLE_CLOCK}, ${MAX_CLOCK}]."
