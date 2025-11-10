@@ -9,7 +9,7 @@ StartLimitBurst=3
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/flatpak update -y --noninteractive --system
+ExecStart=/usr/libexec/goldblack-nvidia-flatpak-sync
 TimeoutStartSec=90
 RemainAfterExit=yes
 Restart=on-failure
