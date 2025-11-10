@@ -1,8 +1,7 @@
 [Unit]
 Description=Install the current NVIDIA drivers in flatpak to avoid desync
-Wants=network-online.target
+Wants=multi-user.target
 Before=display-manager.service
-After=bazzite-flatpak-manager.service
 
 StartLimitInterval=60
 StartLimitBurst=3
@@ -16,4 +15,4 @@ Restart=on-failure
 RestartSec=10
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target
