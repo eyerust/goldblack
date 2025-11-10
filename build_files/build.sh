@@ -30,3 +30,5 @@ dnf5 install -y adw-gtk3-theme bat bridge-utils ddcutil fio gnome-tweaks htop io
 
 # Change default GTK Renderer to opengl because Vulkan is too slow with NVIDIA drivers
 printf '\n# Use OpenGL because Vulkan is slow with NVIDIA drivers\nGSK_RENDERER=opengl\n' >> /etc/environment
+
+systemctl enable goldblack-nvidia-flatpak-sync.service

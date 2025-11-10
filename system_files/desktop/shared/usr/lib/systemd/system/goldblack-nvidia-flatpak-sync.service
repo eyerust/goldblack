@@ -1,0 +1,13 @@
+[Unit]
+Description=Install the current NVIDIA drivers in flatpak to avoid desync
+Wants=network-online.target
+Before=display-manager.service
+After=bazzite-flatpak-manager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/flatpak update -y --noninteractive --system
+TimeoutStartSec=60
+
+[Install]
+WantedBy=multi-user.target
