@@ -2,18 +2,6 @@
 
 set -e
 
-# Check for working internet connection
-echo "Checking for a working internet connection..."
-if ! nm-online -q -t 15; then
-    echo "Network connection not available. Skipping Flatpak update."
-    # We exit with 0 (success) because the script successfully determined
-    # that it should not proceed. This prevents the systemd service
-    # from entering a failed state and attempting pointless retries.
-    exit 0
-fi
-
-echo "Connection confirmed. Proceeding with Flatpak NVIDIA driver update."
-
 echo "Starting Flatpak system update..."
 
 if /usr/bin/flatpak update -y --noninteractive --system; then
