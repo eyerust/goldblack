@@ -2,11 +2,12 @@
 
 set -e
 
-echo "Starting Flatpak system update..."
+echo "Syncing NVIDIA Flatpak runtimes"
+flatpak update --appstream
 
-if /usr/bin/flatpak update -y --noninteractive --system; then
-    echo "Flatpak system update completed successfully."
-else
-    echo "Flatpak system update failed."
-    exit 1
-fi
+echo "Detecting NVIDIA driver version"
+NVIDIA_VERSION=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader)
+
+echo "Installing NVIDIA Flatpak runtimes version ${NVIDIA_VERSION}"
+flatpak install -y flathub org.freedesktop.Platform.GL.nvidia-${NVIDIA_VERSION//./-} org.freedesktop.Platform.GL32.nvidia-${NVIDIA_VERSION//./-}
+echo "NVIDIA Flatpak runtimes installation complete"

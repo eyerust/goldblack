@@ -4,17 +4,12 @@ Wants=multi-user.target
 Before=display-manager.service
 After=network-online.target bazzite-flatpak-manager.service mullvad-daemon.service
 
-StartLimitInterval=60
-StartLimitBurst=3
-
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/nm-online -q --timeout=30
+ExecStart=/usr/bin/nm-online -q --timeout=20
 ExecStart=/usr/libexec/goldblack-nvidia-flatpak-sync
 TimeoutStartSec=90
 RemainAfterExit=yes
-Restart=on-failure
-RestartSec=10
 
 [Install]
 WantedBy=graphical.target
