@@ -2,8 +2,10 @@
 FROM scratch AS ctx
 COPY build_files /
 
+
 # Base Image
-FROM ghcr.io/ublue-os/bazzite-gnome-nvidia-open:stable
+ARG BASE_TAG=stable
+FROM ghcr.io/ublue-os/bazzite-gnome-nvidia-open:${BASE_TAG}
 
 ## Other possible base images include:
 # FROM ghcr.io/ublue-os/bazzite:latest
