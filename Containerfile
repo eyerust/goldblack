@@ -1,10 +1,10 @@
 # Allow build scripts to be referenced without being copied into the final image
+ARG BASE_TAG=stable
+
 FROM scratch AS ctx
 COPY build_files /
 
-
 # Base Image
-ARG BASE_TAG=stable
 FROM ghcr.io/ublue-os/bazzite-gnome-nvidia-open:${BASE_TAG}
 
 ## Other possible base images include:
