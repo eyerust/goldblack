@@ -16,6 +16,8 @@ RUN dnf install -y \
 
 RUN git clone https://github.com/NVIDIA/egl-wayland.git /tmp/egl-wayland
 WORKDIR /tmp/egl-wayland
+# checkout commit 0beb96e2df3ca40cd5156946a42048185b653c2d
+RUN git checkout 0beb96e2df3ca40cd5156946a42048185b653c2d
 RUN meson setup builddir --prefix=/usr --libdir=lib64 && \
     ninja -C builddir
 
@@ -52,8 +54,6 @@ FROM ghcr.io/ublue-os/bazzite-gnome-nvidia-open:${BASE_TAG}
 COPY --from=builder /tmp/egl-wayland/builddir/src/libnvidia-egl-wayland.so.1.1.22 /usr/lib64/
 RUN ln -sf /usr/lib64/libnvidia-egl-wayland.so.1.1.22 /usr/lib64/libnvidia-egl-wayland.so.1 && \
     ln -sf /usr/lib64/libnvidia-egl-wayland.so.1.1.22 /usr/lib64/libnvidia-egl-wayland.so
-
-COPY --from=builder /tmp/egl-wayland/builddir/com.nvidia.wayland.json /usr/share/egl/egl_external_platform.d/10_nvidia_wayland.json
 
 COPY system_files/desktop/shared /
 
