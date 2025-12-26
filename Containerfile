@@ -1,26 +1,6 @@
 # Allow build scripts to be referenced without being copied into the final image
 ARG BASE_TAG=stable
 
-FROM fedora:43 AS builder
-
-RUN dnf install -y \
-    meson \
-    ninja-build \
-    gcc \
-    git \
-    wayland-devel \
-    wayland-protocols-devel \
-    eglexternalplatform-devel \
-    libglvnd-devel \
-    libdrm-devel
-
-RUN git clone https://github.com/NVIDIA/egl-wayland.git /tmp/egl-wayland
-WORKDIR /tmp/egl-wayland
-# checkout commit 0beb96e2df3ca40cd5156946a42048185b653c2d
-RUN git checkout 0beb96e2df3ca40cd5156946a42048185b653c2d
-RUN meson setup builddir --prefix=/usr --libdir=lib64 && \
-    ninja -C builddir
-
 FROM scratch AS ctx
 COPY build_files /
 
@@ -50,10 +30,6 @@ FROM ghcr.io/ublue-os/bazzite-gnome-nvidia-open:${BASE_TAG}
 ### MODIFICATIONS
 ## make modifications desired in your image and install packages by modifying the build.sh script
 ## the following RUN directive does all the things required to run "build.sh" as recommended.
-
-COPY --from=builder /tmp/egl-wayland/builddir/src/libnvidia-egl-wayland.so.1.1.22 /usr/lib64/
-RUN ln -sf /usr/lib64/libnvidia-egl-wayland.so.1.1.22 /usr/lib64/libnvidia-egl-wayland.so.1 && \
-    ln -sf /usr/lib64/libnvidia-egl-wayland.so.1.1.22 /usr/lib64/libnvidia-egl-wayland.so
 
 COPY system_files/desktop/shared /
 
