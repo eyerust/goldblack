@@ -33,3 +33,5 @@ printf '\n# Use OpenGL because Vulkan is slow with NVIDIA drivers\nGSK_RENDERER=
 
 systemctl enable goldblack-nvidia-raise-min-clock.service
 systemctl enable goldblack-nvidia-generate-cdi.service
+
+dnf5 install -y VK_hdr_layer # NVIDIA still needs this
