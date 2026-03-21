@@ -35,4 +35,4 @@ systemctl enable goldblack-nvidia-raise-min-clock.service
 systemctl enable goldblack-nvidia-generate-cdi.service
 
 # Downgrade flatpak because of gnome builder issue (flatpak, flatpak-selinux, flatpak-session-helper, flatpak-libs) to version 1.16.1-1.fc43
-dnf5 downgrade -y flatpak-libs-1.16.1-1.fc43.x86_64 flatpak-session-helper-1.16.1-1.fc43.x86_64 flatpak-selinux-1.16.1-1.fc43.noarch flatpak-1.16.1-1.fc43.x86_64
+# dnf5 downgrade -y flatpak-libs-1.16.1-1.fc43.x86_64 flatpak-session-helper-1.16.1-1.fc43.x86_64 flatpak-selinux-1.16.1-1.fc43.noarch flatpak-1.16.1-1.fc43.x86_64
