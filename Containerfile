@@ -4,6 +4,18 @@ ARG BASE_TAG=stable
 FROM scratch AS ctx
 COPY build_files /
 
+ARG GRT_VERSION=48.0.1
+FROM ghcr.io/ublue-os/bazzite-gnome-nvidia-open:${BASE_TAG} AS thumbnailer-builder
+ARG GRT_VERSION
+RUN dnf5 install -y cargo rust meson ninja-build gcc gettext git libjpeg-turbo-devel glib2-devel
+RUN curl -fsSL -o /tmp/grt.tar.gz \
+      "https://gitlab.gnome.org/World/gnome-raw-thumbnailer/-/archive/${GRT_VERSION}/gnome-raw-thumbnailer-${GRT_VERSION}.tar.gz" \
+ && tar -xzf /tmp/grt.tar.gz -C /tmp \
+ && cd "/tmp/gnome-raw-thumbnailer-${GRT_VERSION}" \
+ && meson setup build --prefix=/usr -Dprofile=release \
+ && meson compile -C build \
+ && meson install -C build --destdir=/install
+
 # Base Image
 FROM ghcr.io/ublue-os/bazzite-gnome-nvidia-open:${BASE_TAG}
 
@@ -38,6 +50,9 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh
+
+COPY --from=thumbnailer-builder /install/usr/bin/raw-thumbnailer /usr/bin/raw-thumbnailer
+COPY --from=thumbnailer-builder /install/usr/share/thumbnailers/ /usr/share/thumbnailers/
     
 ### LINTING
 ## Verify final image and contents are correct.
