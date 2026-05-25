@@ -4,15 +4,11 @@ ARG BASE_TAG=stable
 FROM scratch AS ctx
 COPY build_files /
 
-ARG GRT_VERSION=48.0.1
-FROM ghcr.io/ublue-os/bazzite-gnome-nvidia-open:${BASE_TAG} AS thumbnailer-builder
-ARG GRT_VERSION
-ENV RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo PATH=/opt/rust/cargo/bin:$PATH
-RUN dnf5 install -y meson ninja-build gcc git shared-mime-info rustup \
- && rustup-init -y --default-toolchain stable --profile minimal
-RUN git clone --depth 1 --branch "${GRT_VERSION}" \
-      https://gitlab.gnome.org/World/gnome-raw-thumbnailer.git /src \
- && cd /src \
+FROM fedora:latest AS thumbnailer-builder
+RUN dnf install -y cargo meson ninja-build gcc shared-mime-info curl
+RUN curl -fsSL https://gitlab.gnome.org/World/gnome-raw-thumbnailer/-/archive/48.0.0/gnome-raw-thumbnailer-48.0.0.tar.gz \
+      | tar -xzf - -C /tmp \
+ && cd /tmp/gnome-raw-thumbnailer-48.0.0 \
  && meson setup build --prefix=/usr -Dprofile=release \
  && meson compile -C build \
  && meson install -C build --destdir=/install
@@ -46,17 +42,18 @@ FROM ghcr.io/ublue-os/bazzite-gnome-nvidia-open:${BASE_TAG}
 
 COPY system_files/desktop/shared /
 
+COPY --from=thumbnailer-builder /install/usr/bin/raw-thumbnailer /usr/bin/raw-thumbnailer
+COPY --from=thumbnailer-builder /install/usr/share/thumbnailers/raw.thumbnailer /usr/share/thumbnailers/raw.thumbnailer
+COPY --from=thumbnailer-builder /install/usr/share/mime/packages/raw-thumbnailer.xml /usr/share/mime/packages/raw-thumbnailer.xml
+
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh
 
-COPY --from=thumbnailer-builder /install/usr/bin/raw-thumbnailer /usr/bin/raw-thumbnailer
-COPY --from=thumbnailer-builder /install/usr/share/thumbnailers/raw.thumbnailer /usr/share/thumbnailers/raw.thumbnailer
-COPY --from=thumbnailer-builder /install/usr/share/mime/packages/raw-thumbnailer.xml /usr/share/mime/packages/raw-thumbnailer.xml
 RUN update-mime-database /usr/share/mime
-    
+
 ### LINTING
 ## Verify final image and contents are correct.
 RUN bootc container lint
