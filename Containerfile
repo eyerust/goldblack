@@ -7,9 +7,9 @@ COPY build_files /
 ARG GRT_VERSION=48.0.1
 FROM ghcr.io/ublue-os/bazzite-gnome-nvidia-open:${BASE_TAG} AS thumbnailer-builder
 ARG GRT_VERSION
+ENV RUSTUP_HOME=/opt/rust/rustup CARGO_HOME=/opt/rust/cargo PATH=/opt/rust/cargo/bin:$PATH
 RUN dnf5 install -y meson ninja-build gcc git shared-mime-info rustup \
- && rustup-init -y --default-toolchain stable --profile minimal
-ENV PATH="/root/.cargo/bin:${PATH}"
+ && rustup default stable
 RUN git clone --depth 1 --branch "${GRT_VERSION}" \
       https://gitlab.gnome.org/World/gnome-raw-thumbnailer.git /src \
  && cd /src \
